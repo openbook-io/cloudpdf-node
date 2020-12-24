@@ -2,7 +2,7 @@
 /*! noble-ed25519 - MIT License (c) Paul Miller (paulmillr.com) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.utils = exports.verify = exports.sign = exports.getPublicKey = exports.SignResult = exports.Point = exports.ExtendedPoint = exports.CURVE = void 0;
-const { createHash } = require('crypto');
+const { createHash, randomBytes } = require('crypto');
 const CURVE = {
     a: -1n,
     d: 37095705934669439343138083508754565189542113879843219016388785533085940283555n,
@@ -627,16 +627,7 @@ exports.utils = {
         'c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac03fa',
     ],
     randomPrivateKey: (bytesLength = 32) => {
-        if (typeof window == 'object' && 'crypto' in window) {
-            return window.crypto.getRandomValues(new Uint8Array(bytesLength));
-        }
-        else if (typeof process === 'object' && 'node' in process.versions) {
-            const { randomBytes } = require('crypto');
-            return new Uint8Array(randomBytes(bytesLength).buffer);
-        }
-        else {
-            throw new Error("The environment doesn't have randomBytes function");
-        }
+        return new Uint8Array(randomBytes(bytesLength).buffer);
     },
     sha512: (message) => {
         const hash = createHash('sha512');
